@@ -1,7 +1,3 @@
-import AssemblyKeys._ // put this at the top of the file
-
-assemblySettings
-
 name := "fintrospect-todo-backend"
 
 version := "1.0"
@@ -19,5 +15,4 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 )
 
-// alias for heroku
-addCommandAlias("stage", "assembly")
+enablePlugins(JavaAppPackaging)
