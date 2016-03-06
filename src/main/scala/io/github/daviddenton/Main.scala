@@ -6,13 +6,14 @@ import com.twitter.finagle.{Http, Service}
 import com.twitter.util.Await
 import io.fintrospect.formats.PlainText.ResponseBuilder._
 
-object Main extends App {
-  val host = System.getProperty("http.host", "0.0.0.0")
-  val port = System.getProperty("http.port", "9000")
+object Main {
+  def main (args: Array[String] ) {
+    val port = if(args.length == 0) "5000" else args(0)
 
-  val server = Http.serve(s"$host:$port", Service.mk {
-    r: Request => Ok("hello")
-  })
+    val server = Http.serve(s":$port", Service.mk {
+      r: Request => Ok("hello")
+    })
 
-  Await.ready(server)
+    Await.ready(server)
+  }
 }
