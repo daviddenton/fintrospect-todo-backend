@@ -1,10 +1,8 @@
 package io.fintrospect.todo
 
-import java.util.UUID
-
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.Method.{Delete, Get, Patch, Post}
-import com.twitter.finagle.http.Status.{Conflict, NotFound, Ok}
+import com.twitter.finagle.http.Status.{NotFound, Ok}
 import com.twitter.finagle.http.path.Root
 import com.twitter.finagle.http.{Request, Response}
 import io.fintrospect.ContentTypes._
@@ -39,18 +37,20 @@ class TodoModule(todoDb: TodoDb) extends ServerRoutes[Response] {
 
   private def add = Service.mk {
     rq: Request =>
-      val newTodo = todoSpec <-- rq
-      todoDb.save(newTodo.modify(Todo(UUID.randomUUID().toString, "")))
-      Ok(encode(newTodo))
+      val patch = todoSpec <-- rq
+      val newToDo = patch.modify(todoDb.newTodo())
+      todoDb.save(newToDo)
+      Ok(encode(newToDo))
   }
 
   private def update(id: String) = Service.mk {
     rq: Request =>
       todoDb.get(id) match {
         case Some(currentTodo) => {
-          val updated = todoSpec <-- rq
+          val patch = todoSpec <-- rq
           todoDb.delete(id)
-          todoDb.save(updated.modify(currentTodo))
+          val updated = patch.modify(currentTodo)
+          todoDb.save(updated)
           Ok(encode(updated))
         }
         case None => NotFound(encode(TodoNotFound(id)))

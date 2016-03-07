@@ -1,6 +1,6 @@
 package io.fintrospect.todo
 
-case class TodoPatch(id: String, title: Option[String], completed: Option[Boolean], order: Option[Int], url: Option[String]) {
+case class TodoPatch(title: Option[String], completed: Option[Boolean], order: Option[Int], url: Option[String]) {
   def modify(original: Todo) = original.copy(
     title = title.getOrElse(original.title),
     completed = completed.getOrElse(original.completed),
