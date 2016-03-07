@@ -30,7 +30,7 @@ class TodoModule(todoDb: TodoDb) extends ServerRoutes[Response] {
 
   private def deleteAll = Service.mk {
     r: Request => {
-      todoDb.list().foreach(todo => todoDb.delete(todo.id));
+      todoDb.list().foreach(todo => todoDb.delete(todo.id))
       Ok()
     }
   }

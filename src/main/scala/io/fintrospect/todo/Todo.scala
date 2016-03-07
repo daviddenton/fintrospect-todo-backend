@@ -1,3 +1,3 @@
 package io.fintrospect.todo
 
-case class Todo(id: String, title: String, completed: Boolean, order: Int, url: String)
+case class Todo(id: String, title: Option[String], completed: Option[Boolean], order: Option[Int], url: Option[String])
