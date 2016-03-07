@@ -17,20 +17,20 @@ import io.fintrospect.renderers.swagger2dot0.{ApiInfo, Swagger2dot0Json}
 
 class TodoModule(todoDb: TodoDb) extends ServerRoutes[Response] {
 
-  private val id = Path.uuid("todo item identifier")
+  private val id = Path.string("todo item identifier")
 
   private val todoSpec = Body(BodySpec[Todo](Option("A todo entity"), APPLICATION_JSON, s => decode[Todo](parse(s)), todo => compact(encode(todo))))
 
   private def list = Service.mk { r: Request => Ok(encode(todoDb.list())) }
 
-  private def lookup(id: UUID) = Service.mk { r: Request =>
+  private def lookup(id: String) = Service.mk { r: Request =>
     todoDb.get(id) match {
       case Some(t) => Ok(encode(t))
       case None => NotFound(encode(TodoNotFound(id)))
     }
   }
 
-  private def delete(id: UUID) = Service.mk { r: Request =>
+  private def delete(id: String) = Service.mk { r: Request =>
     todoDb.get(id) match {
       case Some(t) => todoDb.delete(id); Ok(encode(t))
       case None => NotFound(encode(TodoNotFound(id)))
@@ -48,7 +48,7 @@ class TodoModule(todoDb: TodoDb) extends ServerRoutes[Response] {
     }
   }
 
-  private def update(id: UUID) = Service.mk { r: Request =>
+  private def update(id: String) = Service.mk { r: Request =>
     todoDb.get(id) match {
       case Some(currentTodo) => {
         val updated = todoSpec <-- r
