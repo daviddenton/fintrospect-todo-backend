@@ -8,7 +8,7 @@ class TodoDb(rootUrl: String) {
 
   def newTodo() = {
     val id = UUID.randomUUID().toString
-    Todo(id, s"$rootUrl/id")
+    Todo(id, s"$rootUrl/$id")
   }
 
   private val db = mutable.Map.empty[String, Todo]
