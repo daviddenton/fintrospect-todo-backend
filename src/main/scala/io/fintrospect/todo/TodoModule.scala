@@ -12,6 +12,7 @@ import io.fintrospect._
 import io.fintrospect.formats.json.Json4s.Native.JsonFormat._
 import io.fintrospect.formats.json.Json4s.Native.ResponseBuilder._
 import io.fintrospect.parameters.{Body, BodySpec, Path}
+import io.fintrospect.renderers.swagger2dot0.{ApiInfo, Swagger2dot0Json}
 
 
 class TodoModule(todoDb: TodoDb) extends ServerRoutes[Response] {
@@ -59,7 +60,8 @@ class TodoModule(todoDb: TodoDb) extends ServerRoutes[Response] {
     }
   }
 
-  val module = ModuleSpec(Root / "todos")
+  val module = ModuleSpec(Root / "todos", Swagger2dot0Json(ApiInfo("Todo backend API", "1.0")))
+    .withDescriptionPath(_ / "api")
     .withRoute(RouteSpec().at(Get) bindTo list)
     .withRoute(RouteSpec().at(Get) / id bindTo lookup)
     .withRoute(RouteSpec().body(todoSpec).at(Post) bindTo add)
