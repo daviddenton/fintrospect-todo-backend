@@ -2,9 +2,10 @@ package io.fintrospect.todo
 
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.Method.{Delete, Get, Patch, Post}
-import com.twitter.finagle.http.Status.{NotFound, Ok}
+import com.twitter.finagle.http.Status.{Created, NotFound, Ok}
+import com.twitter.finagle.http.filter.Cors._
 import com.twitter.finagle.http.path.Root
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.http.{Status, Request, Response}
 import io.fintrospect.ContentTypes._
 import io.fintrospect._
 import io.fintrospect.formats.json.Json4s.Native.JsonFormat._
@@ -13,7 +14,7 @@ import io.fintrospect.parameters.{Body, BodySpec, Path}
 import io.fintrospect.renderers.swagger2dot0.{ApiInfo, Swagger2dot0Json}
 
 
-class TodoModule(todoDb: TodoDb) extends ServerRoutes[Response] {
+class TodoApp(todoDb: TodoDb) extends ServerRoutes[Response] {
 
   private val id = Path.string("todo item identifier")
 
@@ -51,7 +52,7 @@ class TodoModule(todoDb: TodoDb) extends ServerRoutes[Response] {
       val patch = todoSpec <-- rq
       val newToDo = patch.modify(todoDb.newTodo())
       todoDb.save(newToDo)
-      Ok(encode(newToDo))
+      Created(encode(newToDo))
   }
 
   private def update(id: String) = Service.mk {
@@ -67,7 +68,7 @@ class TodoModule(todoDb: TodoDb) extends ServerRoutes[Response] {
       }
   }
 
-  val module = ModuleSpec(Root / "todos", Swagger2dot0Json(ApiInfo("todo backend API", "1.0")))
+  private val module = ModuleSpec(Root / "todos", Swagger2dot0Json(ApiInfo("todo backend API", "1.0")))
     .withDescriptionPath(_ / "api")
     .withRoute(RouteSpec("lists all todos in the system").at(Get) bindTo listAll)
     .withRoute(RouteSpec("get a todo by id").at(Get) / id bindTo lookup)
@@ -75,4 +76,6 @@ class TodoModule(todoDb: TodoDb) extends ServerRoutes[Response] {
     .withRoute(RouteSpec("patch an existing todo").body(todoSpec).at(Patch) / id bindTo update)
     .withRoute(RouteSpec("delete an existing todo").at(Delete) / id bindTo delete)
     .withRoute(RouteSpec("delete all todos in the system").at(Delete) bindTo deleteAll)
+
+  val service = new HttpFilter(UnsafePermissivePolicy).andThen(module.toService)
 }
