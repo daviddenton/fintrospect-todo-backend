@@ -6,11 +6,6 @@ import com.twitter.util.Await
 object Main {
   def main(args: Array[String]) {
     val port = if (args.length == 0) "5000" else args(0)
-
-    val server = Http.serve(s":$port",
-      new TodoApp(new TodoDb("https://fintrospect-todo-backend.herokuapp.com/todos")).service
-    )
-
-    Await.ready(server)
+    Await.ready(Http.serve(s":$port", new TodoApp(new TodoDb("https://fintrospect-todo-backend.herokuapp.com/todos")).service))
   }
 }
