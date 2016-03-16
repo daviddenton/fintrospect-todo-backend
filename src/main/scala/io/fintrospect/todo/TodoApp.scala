@@ -5,12 +5,11 @@ import com.twitter.finagle.http.Method.{Delete, Get, Patch, Post}
 import com.twitter.finagle.http.Status.{Created, NotFound, Ok}
 import com.twitter.finagle.http.filter.Cors._
 import com.twitter.finagle.http.path.Root
-import com.twitter.finagle.http.{Status, Request, Response}
-import io.fintrospect.ContentTypes._
+import com.twitter.finagle.http.{Request, Response}
 import io.fintrospect._
 import io.fintrospect.formats.json.Json4s.Native.JsonFormat._
 import io.fintrospect.formats.json.Json4s.Native.ResponseBuilder._
-import io.fintrospect.parameters.{Body, BodySpec, Path}
+import io.fintrospect.parameters.{Body, Path}
 import io.fintrospect.renderers.swagger2dot0.{ApiInfo, Swagger2dot0Json}
 
 
@@ -18,7 +17,7 @@ class TodoApp(todoDb: TodoDb) extends ServerRoutes[Request, Response] {
 
   private val id = Path.string("todo item identifier")
 
-  private val todoSpec = Body(BodySpec[TodoPatch](Option("A todo entity"), APPLICATION_JSON, s => decode[TodoPatch](parse(s)), todo => compact(encode(todo))))
+  private val todoSpec = Body(bodySpec[TodoPatch](Option("A todo entity")))
 
   private def listAll = Service.mk { rq: Request => Ok(encode(todoDb.list())) }
 
