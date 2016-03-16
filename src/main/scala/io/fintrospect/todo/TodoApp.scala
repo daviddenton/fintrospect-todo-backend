@@ -14,7 +14,7 @@ import io.fintrospect.parameters.{Body, BodySpec, Path}
 import io.fintrospect.renderers.swagger2dot0.{ApiInfo, Swagger2dot0Json}
 
 
-class TodoApp(todoDb: TodoDb) extends ServerRoutes[Response] {
+class TodoApp(todoDb: TodoDb) extends ServerRoutes[Request, Response] {
 
   private val id = Path.string("todo item identifier")
 
