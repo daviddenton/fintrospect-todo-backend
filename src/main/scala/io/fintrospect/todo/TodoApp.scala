@@ -7,7 +7,7 @@ import com.twitter.finagle.http.filter.Cors.{HttpFilter, UnsafePermissivePolicy}
 import com.twitter.finagle.http.path.Root
 import com.twitter.finagle.http.{Request, Response}
 import io.fintrospect.formats.json.Json4s.Native.JsonFormat.{bodySpec, encode}
-import io.fintrospect.formats.json.Json4s.Native.ResponseBuilder.toResponseBuilder
+import io.fintrospect.formats.json.Json4s.Native.ResponseBuilder.implicits._
 import io.fintrospect.parameters.{Body, Path}
 import io.fintrospect.renderers.swagger2dot0.{ApiInfo, Swagger2dot0Json}
 import io.fintrospect.{ModuleSpec, RouteSpec, ServerRoutes}
@@ -19,7 +19,7 @@ class TodoApp(todoDb: TodoDb) extends ServerRoutes[Request, Response] {
 
   private val todoSpec = Body(bodySpec[TodoPatch](Option("A todo entity")))
 
-  private def listAll = Service.mk { rq: Request => Ok(encode(todoDb.list())) }
+  private val listAll = Service.mk { rq: Request => Ok(encode(todoDb.list())) }
 
   private def lookup(id: String) = Service.mk { rq: Request =>
     todoDb.get(id) match {
@@ -39,14 +39,14 @@ class TodoApp(todoDb: TodoDb) extends ServerRoutes[Request, Response] {
     }
   }
 
-  private def deleteAll = Service.mk {
+  private val deleteAll = Service.mk {
     rq: Request => {
       todoDb.list().foreach(todo => todoDb.delete(todo.id))
       Ok()
     }
   }
 
-  private def add = Service.mk {
+  private val add = Service.mk {
     rq: Request =>
       val patch = todoSpec <-- rq
       val newToDo = patch.modify(todoDb.newTodo())
