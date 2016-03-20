@@ -2,7 +2,7 @@ package io.fintrospect.todo
 
 import com.twitter.finagle.http.Method.{Delete, Get, Patch, Post}
 import com.twitter.finagle.http.Request
-import com.twitter.finagle.http.Status._
+import com.twitter.finagle.http.Status.{Created, NotFound, Ok}
 import com.twitter.util.Await
 import io.fintrospect.ContentTypes
 import io.fintrospect.formats.json.Json4s.Native.JsonFormat

@@ -3,14 +3,14 @@ package io.fintrospect.todo
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.Method.{Delete, Get, Patch, Post}
 import com.twitter.finagle.http.Status.{Created, NotFound, Ok}
-import com.twitter.finagle.http.filter.Cors._
+import com.twitter.finagle.http.filter.Cors.{HttpFilter, UnsafePermissivePolicy}
 import com.twitter.finagle.http.path.Root
 import com.twitter.finagle.http.{Request, Response}
-import io.fintrospect._
-import io.fintrospect.formats.json.Json4s.Native.JsonFormat._
-import io.fintrospect.formats.json.Json4s.Native.ResponseBuilder._
+import io.fintrospect.formats.json.Json4s.Native.JsonFormat.{bodySpec, encode}
+import io.fintrospect.formats.json.Json4s.Native.ResponseBuilder.toResponseBuilder
 import io.fintrospect.parameters.{Body, Path}
 import io.fintrospect.renderers.swagger2dot0.{ApiInfo, Swagger2dot0Json}
+import io.fintrospect.{ModuleSpec, RouteSpec, ServerRoutes}
 
 
 class TodoApp(todoDb: TodoDb) extends ServerRoutes[Request, Response] {
