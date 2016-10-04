@@ -5,7 +5,7 @@ import com.twitter.finagle.http.Request
 import com.twitter.finagle.http.Status.{Created, NotFound, Ok}
 import com.twitter.util.Await
 import io.fintrospect.ContentTypes
-import io.fintrospect.formats.json.Json4s.Native.JsonFormat
+import io.fintrospect.formats.Json4s.JsonFormat
 import io.fintrospect.util.HttpRequestResponseUtil.statusAndContentFrom
 import org.json4s.JsonAST.JString
 import org.scalatest.{FunSpec, ShouldMatchers}

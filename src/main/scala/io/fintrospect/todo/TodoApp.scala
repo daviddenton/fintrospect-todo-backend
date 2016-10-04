@@ -6,8 +6,8 @@ import com.twitter.finagle.http.Status.{Created, NotFound, Ok}
 import com.twitter.finagle.http.filter.Cors.{HttpFilter, UnsafePermissivePolicy}
 import com.twitter.finagle.http.path.Root
 import com.twitter.finagle.http.{Request, Response}
-import io.fintrospect.formats.json.Json4s.Native.JsonFormat.{bodySpec, encode}
-import io.fintrospect.formats.json.Json4s.Native.ResponseBuilder.implicits._
+import io.fintrospect.formats.Json4s.JsonFormat.{bodySpec, encode}
+import io.fintrospect.formats.Json4s.ResponseBuilder.implicits._
 import io.fintrospect.parameters.{Body, Path}
 import io.fintrospect.renderers.swagger2dot0.{ApiInfo, Swagger2dot0Json}
 import io.fintrospect.{ModuleSpec, RouteSpec, ServerRoutes}
