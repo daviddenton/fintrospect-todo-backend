@@ -35,8 +35,6 @@ class TodosAcceptanceTest extends FunSpec with Matchers {
 
   def titles(json: Json) = root.each.title.string.getAll(json)
 
-  def ids(json: Json) = root.each.id.string.getAll(json)
-
   def id(json: Json) = root.id.string.getOption(json).get
 
   def title(json: Json) = root.title.string.getOption(json).get
@@ -75,7 +73,6 @@ class TodosAcceptanceTest extends FunSpec with Matchers {
     }
 
     it("update a todo") {
-      println(newId)
       val request = Request(Patch, "/todos/" + newId)
       request.contentType = ContentTypes.APPLICATION_JSON.value
       request.contentString = """{"title":"bob2"}"""
