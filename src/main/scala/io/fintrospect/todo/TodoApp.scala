@@ -69,14 +69,14 @@ class TodoApp(todoDb: TodoDb) extends ServerRoutes[Request, Response] {
       }
   }
 
-  private val module = ModuleSpec(Root / "todos", Swagger2dot0Json(ApiInfo("todo backend API", "1.0")))
+  private val module = ModuleSpec(Root, Swagger2dot0Json(ApiInfo("todo backend API", "1.0")))
     .withDescriptionPath(_ / "api")
-    .withRoute(RouteSpec("lists all todos in the system").at(Get) bindTo listAll)
-    .withRoute(RouteSpec("get a todo by id").at(Get) / id bindTo lookup)
-    .withRoute(RouteSpec("add a new todo by supplying fields").body(patchTodo).at(Post) bindTo add)
-    .withRoute(RouteSpec("patch an existing todo").body(patchTodo).at(Patch) / id bindTo patch)
-    .withRoute(RouteSpec("delete an existing todo").at(Delete) / id bindTo delete)
-    .withRoute(RouteSpec("delete all todos in the system").at(Delete) bindTo deleteAll)
+    .withRoute(RouteSpec("lists all todos in the system").at(Get) / "todos" bindTo listAll)
+    .withRoute(RouteSpec("get a todo by id").at(Get) / "todos" / id bindTo lookup)
+    .withRoute(RouteSpec("add a new todo by supplying fields").body(patchTodo).at(Post) / "todos" bindTo add)
+    .withRoute(RouteSpec("patch an existing todo").body(patchTodo).at(Patch) / "todos" / id bindTo patch)
+    .withRoute(RouteSpec("delete an existing todo").at(Delete) / "todos" / id bindTo delete)
+    .withRoute(RouteSpec("delete all todos in the system").at(Delete) / "todos" bindTo deleteAll)
 
   val service = new HttpFilter(UnsafePermissivePolicy).andThen(module.toService)
 }
