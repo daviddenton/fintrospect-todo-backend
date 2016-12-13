@@ -10,7 +10,7 @@ import io.fintrospect.formats.Circe.JsonFormat.{encode, patchBody}
 import io.fintrospect.formats.Circe.ResponseBuilder.implicits._
 import io.fintrospect.parameters.Path
 import io.fintrospect.renderers.swagger2dot0.{ApiInfo, Swagger2dot0Json}
-import io.fintrospect.{ModuleSpec, RouteSpec, ServerRoutes}
+import io.fintrospect.{RouteModule, RouteSpec, ServerRoutes}
 
 
 class TodoApp(todoDb: TodoDb) extends ServerRoutes[Request, Response] {
@@ -69,7 +69,7 @@ class TodoApp(todoDb: TodoDb) extends ServerRoutes[Request, Response] {
       }
   }
 
-  private val module = ModuleSpec(Root, Swagger2dot0Json(ApiInfo("todo backend API", "1.0")))
+  private val module = RouteModule(Root, Swagger2dot0Json(ApiInfo("todo backend API", "1.0")))
     .withDescriptionPath(_ / "api")
     .withRoute(RouteSpec("lists all todos in the system").at(Get) / "todos" bindTo listAll)
     .withRoute(RouteSpec("get a todo by id").at(Get) / "todos" / id bindTo lookup)
