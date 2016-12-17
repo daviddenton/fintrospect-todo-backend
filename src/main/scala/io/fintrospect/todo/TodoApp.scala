@@ -6,19 +6,21 @@ import com.twitter.finagle.http.Status.{Created, NotFound, Ok}
 import com.twitter.finagle.http.filter.Cors.{HttpFilter, UnsafePermissivePolicy}
 import com.twitter.finagle.http.path.Root
 import com.twitter.finagle.http.{Request, Response}
-import io.fintrospect.formats.Circe.JsonFormat.{encode, patchBody}
+import io.fintrospect.formats.Circe.JsonFormat.encode
 import io.fintrospect.formats.Circe.ResponseBuilder.implicits._
+import io.fintrospect.formats.Circe.patchBody
 import io.fintrospect.parameters.Path
 import io.fintrospect.renderers.swagger2dot0.{ApiInfo, Swagger2dot0Json}
 import io.fintrospect.{RouteModule, RouteSpec, ServerRoutes}
 
 
 class TodoApp(todoDb: TodoDb) extends ServerRoutes[Request, Response] {
+
   import io.circe.generic.auto._
 
   private val id = Path.string("todo item identifier")
 
-  private val patchTodo = patchBody[Todo](Option("The Todo instance"), Todo("123", "http://www.google.com", "Visit Google"))
+  private val patchTodo = patchBody(Option("The Todo instance"), Todo("123", "http://www.google.com", "Visit Google"))
 
   private val listAll = Service.mk { rq: Request => Ok(encode(todoDb.list())) }
 
