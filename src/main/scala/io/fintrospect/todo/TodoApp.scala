@@ -2,12 +2,11 @@ package io.fintrospect.todo
 
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.Method.{Delete, Get, Patch, Post}
-import com.twitter.finagle.http.Status.{Created, NotFound, Ok}
 import com.twitter.finagle.http.filter.Cors.{HttpFilter, UnsafePermissivePolicy}
 import com.twitter.finagle.http.path.Root
 import com.twitter.finagle.http.{Request, Response}
 import io.fintrospect.formats.Circe.JsonFormat.encode
-import io.fintrospect.formats.Circe.ResponseBuilder.implicits._
+import io.fintrospect.formats.Circe.ResponseBuilder._
 import io.fintrospect.formats.Circe.patchBody
 import io.fintrospect.parameters.Path
 import io.fintrospect.renderers.swagger2dot0.{ApiInfo, Swagger2dot0Json}
@@ -45,7 +44,7 @@ class TodoApp(todoDb: TodoDb) extends ServerRoutes[Request, Response] {
   private val deleteAll = Service.mk {
     rq: Request => {
       todoDb.list().foreach(todo => todoDb.delete(todo.id))
-      Ok()
+      Ok("")
     }
   }
 
