@@ -43,8 +43,9 @@ class TodoApp(todoDb: TodoDb) extends ServerRoutes[Request, Response] {
 
   private val deleteAll = Service.mk {
     rq: Request => {
-      todoDb.list().foreach(todo => todoDb.delete(todo.id))
-      Ok("")
+      val todoes = todoDb.list()
+      todoes.foreach(todo => todoDb.delete(todo.id))
+      Ok(encode(todoes))
     }
   }
 
