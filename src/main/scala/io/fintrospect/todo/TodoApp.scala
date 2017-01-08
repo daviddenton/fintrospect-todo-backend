@@ -19,7 +19,7 @@ class TodoApp(todoDb: TodoDb) extends ServerRoutes[Request, Response] {
 
   private val id = Path.string("todo item identifier")
 
-  private val patchTodo = patchBody(Option("The Todo instance"), Todo("123", "http://www.google.com", "Visit Google"))
+  private val patchTodo = patchBody("The Todo instance", Todo("123", "http://www.google.com", "Visit Google"))
 
   private val listAll = Service.mk { rq: Request => Ok(encode(todoDb.list())) }
 
