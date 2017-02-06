@@ -9,7 +9,7 @@ resolvers += "JCenter" at "https://jcenter.bintray.com"
 libraryDependencies ++= Seq(
   "io.fintrospect" %% "fintrospect-core" % "14.11.0",
   "io.fintrospect" %% "fintrospect-circe" % "14.11.0",
-  "io.circe" %% "circe-optics" % "0.7.0",
+  "io.circe" %% "circe-optics" % "0.7.0" % "test",
   "org.scalatest" %% "scalatest" % "3.0.0" % "test"
 )
 
